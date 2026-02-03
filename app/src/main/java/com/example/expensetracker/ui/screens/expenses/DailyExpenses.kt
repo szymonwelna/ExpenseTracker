@@ -1,4 +1,4 @@
-package com.example.expensetracker.ui.screens
+package com.example.expensetracker.ui.screens.expenses
 
 import com.example.expensetracker.data.model.Expense
 import androidx.compose.foundation.layout.*
@@ -10,14 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.expensetracker.support.convertToCurrency
+import com.example.expensetracker.support.sampleExpenses
 
 
 @Composable
 fun DailyExpenses(modifier: Modifier = Modifier, expensesList: List<Expense> = emptyList()) {
-    LazyColumn(modifier = modifier.fillMaxSize()) {
+    LazyColumn(modifier = modifier) {
         items(expensesList) { expense ->
             ExpenseCard(expense)
         }
@@ -28,6 +30,7 @@ fun DailyExpenses(modifier: Modifier = Modifier, expensesList: List<Expense> = e
 fun ExpenseCard(expense: Expense) {
     Button(
         onClick = { /* TODO */ },
+        elevation = ButtonDefaults.buttonElevation(4.dp),
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.LightGray,
@@ -35,41 +38,22 @@ fun ExpenseCard(expense: Expense) {
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .height(68.dp)
+            .padding(horizontal = 12.dp, vertical = 4.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = expense.name)
+            Text(text = expense.name, fontWeight = Bold)
             Text(text = expense.amount.convertToCurrency())
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun ExpenseCardPreview() {
-//    val expense = Expense("Kawa", 1500L)
-//    ExpenseCard(expense)
-//}
 
 @Preview(showBackground = true)
 @Composable
 fun DailyExpensesPreview() {
     DailyExpenses(Modifier, sampleExpenses)
 }
-
-val sampleExpenses = listOf(
-    Expense("Kawa", 1500L),
-    Expense("Paliwo", 25000L),
-    Expense("Bilet do kina", 3500L),
-    Expense("Czynsz", 120000L),
-    Expense("Zakupy spożywcze", 8540L),
-    Expense("Internet", 6000L),
-    Expense("Siłownia", 15000L),
-    Expense("Obiad", 4500L),
-    Expense("Prezent", 10000L),
-    Expense("Subskrypcja", 2999L)
-)
