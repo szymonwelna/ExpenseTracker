@@ -4,6 +4,7 @@ import com.example.expensetracker.data.model.Expense
 import java.text.NumberFormat
 import java.util.Locale
 
+// Extension Function
 fun Long.convertToCurrency(): String {
     val locale = Locale.Builder()
         .setLanguage("pl")
