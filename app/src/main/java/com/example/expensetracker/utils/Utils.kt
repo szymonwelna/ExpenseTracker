@@ -1,4 +1,4 @@
-package com.example.expensetracker.support
+package com.example.expensetracker.utils
 
 import com.example.expensetracker.data.model.Expense
 import java.text.NumberFormat

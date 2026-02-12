@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.expensetracker.support.convertToCurrency
-import com.example.expensetracker.support.sampleExpenses
+import com.example.expensetracker.utils.convertToCurrency
+import com.example.expensetracker.utils.sampleExpenses
 
 
 @Composable

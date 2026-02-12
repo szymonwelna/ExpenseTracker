@@ -26,7 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.expensetracker.support.sampleExpenses
+import com.example.expensetracker.utils.sampleExpenses
 import com.example.expensetracker.ui.screens.expenses.DailyExpenses
 import com.example.expensetracker.ui.screens.expenses.MonthlyExpenses
 import com.example.expensetracker.ui.screens.expenses.WeeklyExpenses
