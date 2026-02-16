@@ -63,26 +63,19 @@ fun AddNewExpense(dao: ExpenseDao, onDismiss: () -> Unit) {
 
             OutlinedTextField(
                 value = expenseAmount,
-                onValueChange = {
-                    if (it.all { char -> char.isDigit() }) {
-                        expenseAmount = it
-                        if (it.isNotBlank()) amountError = false
+                onValueChange = { input ->
+                    val sanitized = input.replace('.', ',')
+                    if (sanitized.count { it == ',' } <= 1 && sanitized.all { it.isDigit() || it == ',' }) {
+                        expenseAmount = sanitized
+                        if (sanitized.isNotBlank()) amountError = false
                     }
                 },
                 label = { Text("Kwota") },
                 suffix = { Text("zł") },
                 isError = amountError,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 singleLine = true,
                 modifier = Modifier.weight(0.4f)
-            )
-        }
-
-        if (nameError || amountError) {
-            Text(
-                text = "Proszę uzupełnić wymagane pola",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall
             )
         }
 
@@ -93,8 +86,14 @@ fun AddNewExpense(dao: ExpenseDao, onDismiss: () -> Unit) {
 
                 if (!nameError && !amountError) {
                     coroutineScope.launch {
-                        val amount = expenseAmount.toLongOrNull() ?: 0L
-                        dao.insert(Expense(expenseName, amount))
+                        val amountInGrams = try {
+                            val normalized = expenseAmount.replace(',', '.')
+                            (normalized.toDouble() * 100).toLong()
+                        } catch (e: NumberFormatException) {
+                            0L
+                        }
+
+                        dao.insert(Expense(expenseName, amountInGrams))
                         onDismiss()
                     }
                 }
