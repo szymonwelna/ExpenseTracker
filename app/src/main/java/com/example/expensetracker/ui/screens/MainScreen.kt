@@ -25,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.expensetracker.data.local.ExpenseDao
 import com.example.expensetracker.ui.components.AddNewExpense
-import com.example.expensetracker.utils.sampleExpenses
 import com.example.expensetracker.ui.screens.expenses.DailyExpenses
 import com.example.expensetracker.ui.screens.expenses.MonthlyExpenses
 import com.example.expensetracker.ui.screens.expenses.WeeklyExpenses
@@ -58,7 +58,7 @@ fun MainScreen(dao: ExpenseDao, modifier: Modifier = Modifier) {
     var selectedScreen by remember { mutableStateOf(Screens.ExpensesScreen) }
     var selectedScope by remember { mutableStateOf(ExpenseScope.Daily) }
     var showAddExpense by remember { mutableStateOf(false) }
-    val expenses = sampleExpenses
+    val expenses by dao.getAll().collectAsState(initial = emptyList())
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
