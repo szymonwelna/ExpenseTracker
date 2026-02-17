@@ -34,9 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.expensetracker.data.local.ExpenseDao
 import com.example.expensetracker.ui.views.components.EditExpense
-import com.example.expensetracker.ui.screens.expenses.DailyExpenses
-import com.example.expensetracker.ui.screens.expenses.MonthlyExpenses
-import com.example.expensetracker.ui.screens.expenses.WeeklyExpenses
+import com.example.expensetracker.ui.views.screens.expenses.DailyExpenses
+import com.example.expensetracker.ui.views.screens.expenses.MonthlyExpenses
+import com.example.expensetracker.ui.views.screens.expenses.WeeklyExpenses
 
 // Displayable Screens
 enum class ExpenseScope(val label: String, val icon: ImageVector) {
