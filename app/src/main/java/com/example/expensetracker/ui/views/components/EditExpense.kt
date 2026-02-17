@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.example.expensetracker.ui.viewmodels.EditExpenseViewmodel
 
 @Composable
-fun AddNewExpense(viewModel: EditExpenseViewmodel, onDismiss: () -> Unit) {
+fun EditExpense(viewModel: EditExpenseViewmodel, onDismiss: () -> Unit) {
     val expenseState = viewModel.expenseState
 
     Column(
