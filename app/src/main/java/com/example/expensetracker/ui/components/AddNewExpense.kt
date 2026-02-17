@@ -21,16 +21,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.expensetracker.data.local.ExpenseDao
 import com.example.expensetracker.data.model.Expense
+import com.example.expensetracker.ui.state.EditExpenseState
 import kotlinx.coroutines.launch
 
 @Composable
 fun AddNewExpense(dao: ExpenseDao, onDismiss: () -> Unit) {
-    var expenseName by remember { mutableStateOf("") }
-    var expenseAmount by remember { mutableStateOf("") }
-
-    var nameError by remember { mutableStateOf(false) }
-    var amountError by remember { mutableStateOf(false) }
-
+    var expenseState by remember { mutableStateOf(EditExpenseState()) }
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -50,29 +46,29 @@ fun AddNewExpense(dao: ExpenseDao, onDismiss: () -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             OutlinedTextField(
-                value = expenseName,
+                value = expenseState.name,
                 onValueChange = {
-                    expenseName = it
-                    if (it.isNotBlank()) nameError = false
+                    expenseState.name = it
+                    if (it.isNotBlank()) expenseState.nameError = false
                 },
                 label = { Text("Nazwa") },
-                isError = nameError,
+                isError = expenseState.nameError,
                 singleLine = true,
                 modifier = Modifier.weight(0.6f)
             )
 
             OutlinedTextField(
-                value = expenseAmount,
+                value = expenseState.amount,
                 onValueChange = { input ->
                     val sanitized = input.replace('.', ',')
                     if (sanitized.count { it == ',' } <= 1 && sanitized.all { it.isDigit() || it == ',' }) {
-                        expenseAmount = sanitized
-                        if (sanitized.isNotBlank()) amountError = false
+                        expenseState.amount = sanitized
+                        if (sanitized.isNotBlank()) expenseState.amountError = false
                     }
                 },
                 label = { Text("Kwota") },
                 suffix = { Text("zł") },
-                isError = amountError,
+                isError = expenseState.amountError,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 singleLine = true,
                 modifier = Modifier.weight(0.4f)
@@ -81,19 +77,19 @@ fun AddNewExpense(dao: ExpenseDao, onDismiss: () -> Unit) {
 
         Button(
             onClick = {
-                nameError = expenseName.isBlank()
-                amountError = expenseAmount.isBlank()
+                expenseState.nameError = expenseState.name.isBlank()
+                expenseState.amountError = expenseState.amount.isBlank()
 
-                if (!nameError && !amountError) {
+                if (!expenseState.nameError && !expenseState.amountError) {
                     coroutineScope.launch {
-                        val amountInGrams = try {
-                            val normalized = expenseAmount.replace(',', '.')
+                        val amount = try {
+                            val normalized = expenseState.amount.replace(',', '.')
                             (normalized.toDouble() * 100).toLong()
                         } catch (e: NumberFormatException) {
                             0L
                         }
 
-                        dao.insert(Expense(expenseName, amountInGrams))
+                        dao.insert(Expense(expenseState.name, amount))
                         onDismiss()
                     }
                 }
