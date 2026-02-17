@@ -11,23 +11,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.expensetracker.data.local.ExpenseDao
-import com.example.expensetracker.data.model.Expense
-import com.example.expensetracker.ui.state.EditExpenseState
-import kotlinx.coroutines.launch
+import com.example.expensetracker.ui.viewmodels.EditExpenseViewmodel
 
 @Composable
-fun AddNewExpense(dao: ExpenseDao, onDismiss: () -> Unit) {
-    var expenseState by remember { mutableStateOf(EditExpenseState()) }
-    val coroutineScope = rememberCoroutineScope()
+fun AddNewExpense(viewModel: EditExpenseViewmodel, onDismiss: () -> Unit) {
+    val expenseState = viewModel.expenseState
 
     Column(
         modifier = Modifier
@@ -47,10 +38,7 @@ fun AddNewExpense(dao: ExpenseDao, onDismiss: () -> Unit) {
         ) {
             OutlinedTextField(
                 value = expenseState.name,
-                onValueChange = {
-                    expenseState.name = it
-                    if (it.isNotBlank()) expenseState.nameError = false
-                },
+                onValueChange = { viewModel.onNameChange(it) },
                 label = { Text("Nazwa") },
                 isError = expenseState.nameError,
                 singleLine = true,
@@ -59,13 +47,7 @@ fun AddNewExpense(dao: ExpenseDao, onDismiss: () -> Unit) {
 
             OutlinedTextField(
                 value = expenseState.amount,
-                onValueChange = { input ->
-                    val sanitized = input.replace('.', ',')
-                    if (sanitized.count { it == ',' } <= 1 && sanitized.all { it.isDigit() || it == ',' }) {
-                        expenseState.amount = sanitized
-                        if (sanitized.isNotBlank()) expenseState.amountError = false
-                    }
-                },
+                onValueChange = { viewModel.onAmountChange(it) },
                 label = { Text("Kwota") },
                 suffix = { Text("zł") },
                 isError = expenseState.amountError,
@@ -76,24 +58,7 @@ fun AddNewExpense(dao: ExpenseDao, onDismiss: () -> Unit) {
         }
 
         Button(
-            onClick = {
-                expenseState.nameError = expenseState.name.isBlank()
-                expenseState.amountError = expenseState.amount.isBlank()
-
-                if (!expenseState.nameError && !expenseState.amountError) {
-                    coroutineScope.launch {
-                        val amount = try {
-                            val normalized = expenseState.amount.replace(',', '.')
-                            (normalized.toDouble() * 100).toLong()
-                        } catch (e: NumberFormatException) {
-                            0L
-                        }
-
-                        dao.insert(Expense(expenseState.name, amount))
-                        onDismiss()
-                    }
-                }
-            },
+            onClick = { viewModel.saveExpense { onDismiss() } },
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
         ) {
             Text("Dodaj wydatek")
