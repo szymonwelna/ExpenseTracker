@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ExpenseDao {
     @Query("SELECT * FROM expenses")
-    suspend fun getAll(): Flow<List<Expense>>
+    fun getAll(): Flow<List<Expense>>
 
     @Query("SELECT * FROM expenses WHERE id = :id")
-    suspend fun getById(id: Int): Flow<Expense>
+    fun getById(id: Int): Flow<Expense>
 
     @Insert
     suspend fun insert(expense: Expense)
