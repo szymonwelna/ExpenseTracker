@@ -1,4 +1,4 @@
-package com.example.expensetracker.ui.screens
+package com.example.expensetracker.ui.views.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
