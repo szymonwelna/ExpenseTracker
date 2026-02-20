@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.expensetracker.ui.views.components.ExpenseCard
 import com.example.expensetracker.utils.convertToCurrency
 import com.example.expensetracker.utils.sampleExpenses
 
@@ -22,32 +23,6 @@ fun DailyExpenses(modifier: Modifier = Modifier, expensesList: List<Expense> = e
     LazyColumn(modifier = modifier) {
         items(expensesList) { expense ->
             ExpenseCard(expense)
-        }
-    }
-}
-
-@Composable
-fun ExpenseCard(expense: Expense) {
-    Button(
-        onClick = { /* TODO */ },
-        elevation = ButtonDefaults.buttonElevation(4.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.LightGray,
-            contentColor = Color.Black
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(68.dp)
-            .padding(horizontal = 12.dp, vertical = 4.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = expense.name, fontWeight = Bold)
-            Text(text = expense.amount.convertToCurrency())
         }
     }
 }
