@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
-class MainScreenViewmodel(private val dao: ExpenseDao) : ViewModel() {
+class MainScreenViewModel(private val dao: ExpenseDao) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainScreenState())
     val uiState = _uiState.asStateFlow()

@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.expensetracker.data.local.ExpenseDao
 import com.example.expensetracker.ui.state.ExpenseScope
 import com.example.expensetracker.ui.state.Screens
-import com.example.expensetracker.ui.viewmodels.EditExpenseViewmodel
-import com.example.expensetracker.ui.viewmodels.MainScreenViewmodel
+import com.example.expensetracker.ui.viewmodels.EditExpenseViewModel
+import com.example.expensetracker.ui.viewmodels.MainScreenViewModel
 import com.example.expensetracker.ui.views.components.EditExpense
 import com.example.expensetracker.ui.views.screens.expenses.*
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,8 +20,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(dao: ExpenseDao, modifier: Modifier = Modifier) {
-    val viewModel: MainScreenViewmodel = viewModel {
-        MainScreenViewmodel(dao)
+    val viewModel: MainScreenViewModel = viewModel {
+        MainScreenViewModel(dao)
     }
 
     val state by viewModel.uiState.collectAsState()
@@ -78,10 +78,10 @@ fun MainScreen(dao: ExpenseDao, modifier: Modifier = Modifier) {
                     shape = MaterialTheme.shapes.large,
                     tonalElevation = AlertDialogDefaults.TonalElevation
                 ) {
-                    val editViewModel = viewModel<EditExpenseViewmodel>(
+                    val editViewModel = viewModel<EditExpenseViewModel>(
                         factory = object : ViewModelProvider.Factory {
                             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                                return EditExpenseViewmodel(dao) as T
+                                return EditExpenseViewModel(dao) as T
                             }
                         }
                     )

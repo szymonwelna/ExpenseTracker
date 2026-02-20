@@ -11,14 +11,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState // Dodany import
+import androidx.compose.runtime.getValue // Dodany import
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.expensetracker.ui.viewmodels.EditExpenseViewmodel
+import com.example.expensetracker.ui.viewmodels.EditExpenseViewModel
 
 @Composable
-fun EditExpense(viewModel: EditExpenseViewmodel, onDismiss: () -> Unit) {
-    val expenseState = viewModel.expenseState
+fun EditExpense(viewModel: EditExpenseViewModel, onDismiss: () -> Unit) {
+    val expenseState by viewModel.expenseState.collectAsState()
 
     Column(
         modifier = Modifier
