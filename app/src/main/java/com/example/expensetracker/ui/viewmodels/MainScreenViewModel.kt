@@ -2,7 +2,7 @@ package com.example.expensetracker.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.expensetracker.data.local.ExpenseDao
+import com.example.expensetracker.data.repository.ExpenseRepository
 import com.example.expensetracker.ui.state.MainScreenState
 import com.example.expensetracker.ui.state.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,12 +11,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
-class MainScreenViewModel(private val dao: ExpenseDao) : ViewModel() {
-
+class MainScreenViewModel(private val repository: ExpenseRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(MainScreenState())
     val uiState = _uiState.asStateFlow()
 
-    val expenses = dao.getAll().stateIn(
+    val expenses = repository.getAll().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList()

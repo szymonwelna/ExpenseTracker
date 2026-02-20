@@ -6,22 +6,19 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.example.expensetracker.data.local.ExpenseDao
 import com.example.expensetracker.ui.state.ExpenseScope
 import com.example.expensetracker.ui.state.Screens
-import com.example.expensetracker.ui.viewmodels.EditExpenseViewModel
 import com.example.expensetracker.ui.viewmodels.MainScreenViewModel
 import com.example.expensetracker.ui.views.components.EditExpense
 import com.example.expensetracker.ui.views.screens.expenses.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.data.repository.ExpenseRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(dao: ExpenseDao, modifier: Modifier = Modifier) {
+fun MainScreen(repository: ExpenseRepository, modifier: Modifier = Modifier) {
     val viewModel: MainScreenViewModel = viewModel {
-        MainScreenViewModel(dao)
+        MainScreenViewModel(repository)
     }
 
     val state by viewModel.uiState.collectAsState()
@@ -68,30 +65,7 @@ fun MainScreen(dao: ExpenseDao, modifier: Modifier = Modifier) {
         }
 
         if (state.showEditExpense) {
-            BasicAlertDialog(
-                onDismissRequest = { viewModel.onToggleEditDialog(false) }
-            ) {
-                Surface(
-                    modifier = Modifier
-                        .wrapContentWidth()
-                        .wrapContentHeight(),
-                    shape = MaterialTheme.shapes.large,
-                    tonalElevation = AlertDialogDefaults.TonalElevation
-                ) {
-                    val editViewModel = viewModel<EditExpenseViewModel>(
-                        factory = object : ViewModelProvider.Factory {
-                            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                                return EditExpenseViewModel(dao) as T
-                            }
-                        }
-                    )
-
-                    EditExpense(
-                        viewModel = editViewModel,
-                        onDismiss = { viewModel.onToggleEditDialog(false) }
-                    )
-                }
-            }
+            EditExpense(repository) { viewModel.onToggleEditDialog(false) }
         }
     }
 }

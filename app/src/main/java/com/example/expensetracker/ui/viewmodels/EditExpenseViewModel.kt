@@ -2,16 +2,15 @@ package com.example.expensetracker.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.expensetracker.data.local.ExpenseDao
 import com.example.expensetracker.data.model.Expense
+import com.example.expensetracker.data.repository.ExpenseRepository
 import com.example.expensetracker.ui.state.EditExpenseState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class EditExpenseViewModel(private val dao: ExpenseDao) : ViewModel() {
-
+class EditExpenseViewModel(private val repository: ExpenseRepository) : ViewModel() {
     private val _expenseState = MutableStateFlow(EditExpenseState())
     val expenseState = _expenseState.asStateFlow()
 
@@ -38,7 +37,7 @@ class EditExpenseViewModel(private val dao: ExpenseDao) : ViewModel() {
         }
     }
 
-    fun saveExpense(onSuccess: () -> Unit) {
+    fun saveExpense() {
         val currentState = _expenseState.value
         val isNameError = currentState.name.isBlank()
         val isAmountError = currentState.amount.isBlank()
@@ -51,11 +50,11 @@ class EditExpenseViewModel(private val dao: ExpenseDao) : ViewModel() {
             viewModelScope.launch {
                 val amountLong = try {
                     (currentState.amount.replace(',', '.').toDouble() * 100).toLong()
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     0L
                 }
-                dao.insert(Expense(currentState.name, amountLong))
-                onSuccess()
+                repository.insert(Expense(currentState.name, amountLong))
+                _expenseState.update { it.copy(isSaved = true) }
             }
         }
     }
