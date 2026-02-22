@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ExpenseTracker</string>
+    <string name="new_expense_title">Nowy wydatek</string>
+    <string name="ee_expense_name_label">Nazwa</string>
+    <string name="ee_expense_value_label">Kwota</string>
+    <string name="delete_expense_button">Usuń wydatek</string>
+    <string name="add_expense_button">Dodaj wydatek</string>
+    <string name="settings_screen_label">Ekran Ustawień</string>
+    <string name="new_expense_icon_description">Dodaj wydatek</string>
+    <string name="summary_screen_label">Ekran Podsumowania</string>
 </resources>

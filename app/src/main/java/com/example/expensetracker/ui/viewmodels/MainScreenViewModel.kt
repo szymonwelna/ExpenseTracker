@@ -2,6 +2,7 @@ package com.example.expensetracker.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.expensetracker.data.model.Expense
 import com.example.expensetracker.data.repository.ExpenseRepository
 import com.example.expensetracker.ui.state.MainScreenState
 import com.example.expensetracker.ui.state.Screens
@@ -26,6 +27,20 @@ class MainScreenViewModel(private val repository: ExpenseRepository) : ViewModel
     }
 
     fun onToggleEditDialog(show: Boolean) {
-        _uiState.update { it.copy(showEditExpense = show) }
+        _uiState.update {
+            it.copy(
+                showEditExpense = show,
+                selectedExpense = if (!show) null else it.selectedExpense
+            )
+        }
+    }
+
+    fun onExpenseClick(expense: Expense) {
+        _uiState.update {
+            it.copy(
+                selectedExpense = expense,
+                showEditExpense = true
+            )
+        }
     }
 }

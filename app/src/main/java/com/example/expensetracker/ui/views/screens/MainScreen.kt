@@ -6,12 +6,14 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.example.expensetracker.ui.state.ExpenseScope
 import com.example.expensetracker.ui.state.Screens
 import com.example.expensetracker.ui.viewmodels.MainScreenViewModel
 import com.example.expensetracker.ui.views.components.EditExpense
 import com.example.expensetracker.ui.views.screens.expenses.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.data.repository.ExpenseRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,26 +48,37 @@ fun MainScreen(repository: ExpenseRepository, modifier: Modifier = Modifier) {
                 onClick = { viewModel.onToggleEditDialog(true) },
                 shape = Shapes().medium
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Dodaj wydatek")
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = stringResource(R.string.new_expense_icon_description)
+                )
             }
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (state.screen) {
-                Screens.Settings -> Text("Ekran Ustawień")
+                Screens.Settings -> Text(stringResource(R.string.settings_screen_label))
                 Screens.ExpensesScreen -> {
                     when (state.scope) {
-                        ExpenseScope.Daily -> DailyExpenses(Modifier, expenses)
+                        ExpenseScope.Daily -> DailyExpenses(
+                            modifier = Modifier,
+                            expensesList = expenses,
+                            onExpenseClick = { expense ->
+                                viewModel.onExpenseClick(expense)
+                            }
+                        )
                         ExpenseScope.Weekly -> WeeklyExpenses(Modifier, expenses)
                         ExpenseScope.Monthly -> MonthlyExpenses(Modifier, expenses)
                     }
                 }
-                Screens.SummaryScreen -> Text("Ekran Podsumowania")
+                Screens.SummaryScreen -> Text(stringResource(R.string.summary_screen_label))
             }
         }
 
         if (state.showEditExpense) {
-            EditExpense(repository) { viewModel.onToggleEditDialog(false) }
+            EditExpense(repository) {
+                viewModel.onToggleEditDialog(false)
+            }
         }
     }
 }

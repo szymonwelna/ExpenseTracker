@@ -6,11 +6,13 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.expensetracker.data.model.Expense
 
 data class MainScreenState(
     val showEditExpense: Boolean = false,
     val screen: Screens = Screens.ExpensesScreen,
-    val scope: ExpenseScope = ExpenseScope.Daily
+    val scope: ExpenseScope = ExpenseScope.Daily,
+    val selectedExpense: Expense? = null,
 ) {
     val currentTitle: String
         get() = if (screen == Screens.ExpensesScreen) scope.label else screen.label
