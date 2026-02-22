@@ -13,11 +13,14 @@ interface ExpenseDao {
     fun getAll(): Flow<List<Expense>>
 
     @Query("SELECT * FROM expenses WHERE id = :id")
-    fun getById(id: Int): Flow<Expense>
+    fun getById(id: Long): Flow<Expense>
 
     @Insert
     suspend fun insert(expense: Expense)
 
     @Delete
     suspend fun delete(expense: Expense)
+
+    @Query("DELETE FROM expenses WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }

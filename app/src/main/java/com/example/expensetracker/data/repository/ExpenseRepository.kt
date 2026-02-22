@@ -10,7 +10,7 @@ class ExpenseRepository(private val expenseDao: ExpenseDao) {
         return expenseDao.getAll()
     }
 
-    fun getById(id: Int): Flow<Expense> {
+    fun getById(id: Long): Flow<Expense> {
         return expenseDao.getById(id)
     }
 
@@ -20,5 +20,9 @@ class ExpenseRepository(private val expenseDao: ExpenseDao) {
 
     suspend fun delete(expense: Expense) {
         expenseDao.delete(expense)
+    }
+
+    suspend fun deleteById(id: Long) {
+        expenseDao.deleteById(id)
     }
 }

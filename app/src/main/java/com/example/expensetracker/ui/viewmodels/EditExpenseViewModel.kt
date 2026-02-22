@@ -58,4 +58,13 @@ class EditExpenseViewModel(private val repository: ExpenseRepository) : ViewMode
             }
         }
     }
+
+    fun deleteExpense() {
+        _expenseState.value.expenseId?.let { id ->
+            viewModelScope.launch {
+                repository.deleteById(id)
+                _expenseState.update { it.copy(isDeleted = true) }
+            }
+        }
+    }
 }

@@ -21,12 +21,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.expensetracker.data.repository.ExpenseRepository
+import com.example.expensetracker.ui.state.ExpenseDialogMode
 import com.example.expensetracker.ui.viewmodels.EditExpenseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,8 +44,8 @@ fun EditExpense(repository: ExpenseRepository, onDismiss: () -> Unit) {
 
     val expenseState by editViewModel.expenseState.collectAsState()
 
-    LaunchedEffect(expenseState.isSaved) {
-        if (expenseState.isSaved) {
+    LaunchedEffect(expenseState.isSaved, expenseState.isDeleted) {
+        if (expenseState.isSaved || expenseState.isDeleted) {
             onDismiss()
         }
     }
@@ -93,11 +95,27 @@ fun EditExpense(repository: ExpenseRepository, onDismiss: () -> Unit) {
                     )
                 }
 
-                Button(
-                    onClick = { editViewModel.saveExpense() },
-                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
-                ) {
-                    Text("Dodaj wydatek")
+                if (expenseState.mode != ExpenseDialogMode.ADD_TODAY) {
+                    // TODO Add date picker
+                }
+
+
+                Row() {
+                    if (expenseState.mode == ExpenseDialogMode.EDIT) {
+                        Button(
+                            onClick = { editViewModel.deleteExpense() },
+                            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                        ) {
+                            Text("Usuń wydatek")
+                        }
+                    }
+
+                    Button(
+                        onClick = { editViewModel.saveExpense() },
+                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                    ) {
+                        Text("Dodaj wydatek")
+                    }
                 }
             }
         }
