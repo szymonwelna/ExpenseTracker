@@ -29,7 +29,12 @@ fun MainScreen(repository: ExpenseRepository, modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text(state.currentTitle) })
+            TopAppBar(
+                title = { Text(state.currentTitle) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface)
+                )
         },
         bottomBar = {
             NavigationBar {
