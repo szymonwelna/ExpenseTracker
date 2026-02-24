@@ -76,7 +76,7 @@ class EditExpenseViewModel(private val repository: ExpenseRepository) : ViewMode
                 } catch (_: Exception) {
                     0L
                 }
-                repository.upsert(Expense(currentState.name, amountLong))
+                repository.upsert(Expense(currentState.name, amountLong, id = currentState.expenseId ?: 0L))
                 _uiEvent.send(UiEvent.CloseDialog)
             }
         }
