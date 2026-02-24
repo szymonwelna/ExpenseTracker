@@ -32,6 +32,7 @@ import com.example.expensetracker.data.model.Expense
 import com.example.expensetracker.data.repository.ExpenseRepository
 import com.example.expensetracker.ui.state.ExpenseDialogMode
 import com.example.expensetracker.ui.viewmodels.EditExpenseViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,12 +51,16 @@ fun EditExpense(
 
     val expenseState by editViewModel.expenseState.collectAsState()
 
-    LaunchedEffect(expenseState.isSaved, expenseState.isDeleted) {
-        if (expenseState.isSaved || expenseState.isDeleted) {
-            editViewModel.resetCloseFlags()
-            onDismiss()
-        }
+    LaunchedEffect(expenseToEdit) {
         editViewModel.initExpense(expenseToEdit)
+    }
+
+    LaunchedEffect(Unit) {
+        editViewModel.uiEvent.collectLatest { event ->
+            when (event) {
+                is EditExpenseViewModel.UiEvent.CloseDialog -> onDismiss()
+            }
+        }
     }
 
     BasicAlertDialog(onDismissRequest = onDismiss) {
