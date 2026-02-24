@@ -22,7 +22,7 @@ import com.example.expensetracker.utils.convertToCurrency
 @Composable
 fun ExpenseCard(expense: Expense, onClick: () -> Unit) {
     Button(
-        onClick = { onClick },
+        onClick = { onClick() },
         elevation = ButtonDefaults.buttonElevation(4.dp),
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(

@@ -10,7 +10,7 @@ data class EditExpenseState(
     val date: String = "", // Temporary, until I decide on better solution
     val dateError: Boolean = false,
     val isSaved: Boolean = false,
-    val isDeleted: Boolean = true
+    val isDeleted: Boolean = false
 )
 
 enum class ExpenseDialogMode {
