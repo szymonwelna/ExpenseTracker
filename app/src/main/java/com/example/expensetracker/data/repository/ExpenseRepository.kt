@@ -14,8 +14,8 @@ class ExpenseRepository(private val expenseDao: ExpenseDao) {
         return expenseDao.getById(id)
     }
 
-    suspend fun insert(expense: Expense) {
-        expenseDao.insert(expense)
+    suspend fun upsert(expense: Expense) {
+        expenseDao.upsert(expense)
     }
 
     suspend fun delete(expense: Expense) {

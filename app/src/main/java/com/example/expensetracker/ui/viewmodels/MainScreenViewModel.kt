@@ -16,6 +16,10 @@ class MainScreenViewModel(private val repository: ExpenseRepository) : ViewModel
     private val _uiState = MutableStateFlow(MainScreenState())
     val uiState = _uiState.asStateFlow()
 
+    fun onAddExpenseClick() {
+        _uiState.update { it.copy(showEditExpense = true, selectedExpense = null) }
+    }
+
     val expenses = repository.getAll().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),

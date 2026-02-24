@@ -45,7 +45,7 @@ fun MainScreen(repository: ExpenseRepository, modifier: Modifier = Modifier) {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.onToggleEditDialog(true) },
+                onClick = { viewModel.onAddExpenseClick() },
                 shape = Shapes().medium
             ) {
                 Icon(
@@ -76,7 +76,10 @@ fun MainScreen(repository: ExpenseRepository, modifier: Modifier = Modifier) {
         }
 
         if (state.showEditExpense) {
-            EditExpense(repository) {
+            EditExpense(
+                repository = repository,
+                expenseToEdit = state.selectedExpense
+            ) {
                 viewModel.onToggleEditDialog(false)
             }
         }

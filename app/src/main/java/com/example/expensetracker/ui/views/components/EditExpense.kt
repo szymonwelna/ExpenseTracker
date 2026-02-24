@@ -28,13 +28,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.expensetracker.R
+import com.example.expensetracker.data.model.Expense
 import com.example.expensetracker.data.repository.ExpenseRepository
 import com.example.expensetracker.ui.state.ExpenseDialogMode
 import com.example.expensetracker.ui.viewmodels.EditExpenseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditExpense(repository: ExpenseRepository, onDismiss: () -> Unit) {
+fun EditExpense(
+    repository: ExpenseRepository,
+    expenseToEdit: Expense? = null,
+    onDismiss: () -> Unit
+) {
     val editViewModel = viewModel<EditExpenseViewModel>(
         factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -47,8 +52,10 @@ fun EditExpense(repository: ExpenseRepository, onDismiss: () -> Unit) {
 
     LaunchedEffect(expenseState.isSaved, expenseState.isDeleted) {
         if (expenseState.isSaved || expenseState.isDeleted) {
+            editViewModel.resetCloseFlags()
             onDismiss()
         }
+        editViewModel.initExpense(expenseToEdit)
     }
 
     BasicAlertDialog(onDismissRequest = onDismiss) {
@@ -101,13 +108,14 @@ fun EditExpense(repository: ExpenseRepository, onDismiss: () -> Unit) {
                 }
 
 
-                Row() {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     if (expenseState.mode == ExpenseDialogMode.EDIT) {
                         Button(
                             onClick = { editViewModel.deleteExpense() },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp)
+                            modifier = Modifier.weight(1f)
                         ) {
                             Text(stringResource(R.string.delete_expense_button))
                         }
@@ -115,9 +123,7 @@ fun EditExpense(repository: ExpenseRepository, onDismiss: () -> Unit) {
 
                     Button(
                         onClick = { editViewModel.saveExpense() },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp)
+                        modifier = Modifier.weight(1f)
                     ) {
                         Text(stringResource(R.string.add_expense_button))
                     }
