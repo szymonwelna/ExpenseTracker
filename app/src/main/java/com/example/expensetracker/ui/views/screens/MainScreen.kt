@@ -1,12 +1,20 @@
 package com.example.expensetracker.ui.views.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.innerShadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.example.expensetracker.ui.state.ExpenseScope
 import com.example.expensetracker.ui.state.Screens
 import com.example.expensetracker.ui.viewmodels.MainScreenViewModel
@@ -19,6 +27,9 @@ import com.example.expensetracker.data.repository.ExpenseRepository
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(repository: ExpenseRepository, modifier: Modifier = Modifier) {
+    val barsColor = MaterialTheme.colorScheme.surfaceContainer
+    val contentColor = MaterialTheme.colorScheme.background
+
     val viewModel: MainScreenViewModel = viewModel {
         MainScreenViewModel(repository)
     }
@@ -28,11 +39,12 @@ fun MainScreen(repository: ExpenseRepository, modifier: Modifier = Modifier) {
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        containerColor =  barsColor,
         topBar = {
             TopAppBar(
                 title = { Text(state.currentTitle) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    containerColor = barsColor,
                     titleContentColor = MaterialTheme.colorScheme.onSurface)
                 )
         },
@@ -60,23 +72,22 @@ fun MainScreen(repository: ExpenseRepository, modifier: Modifier = Modifier) {
             }
         }
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
-            when (state.screen) {
-                Screens.Settings -> Text(stringResource(R.string.settings_screen_label))
-                Screens.ExpensesScreen -> {
-                    when (state.scope) {
-                        ExpenseScope.Daily -> DailyExpenses(
-                            modifier = Modifier,
-                            expensesList = expenses,
-                            onExpenseClick = { expense ->
-                                viewModel.onExpenseClick(expense)
-                            }
-                        )
-                        ExpenseScope.Weekly -> WeeklyExpenses(Modifier, expenses)
-                        ExpenseScope.Monthly -> MonthlyExpenses(Modifier, expenses)
-                    }
-                }
-                Screens.SummaryScreen -> Text(stringResource(R.string.summary_screen_label))
+        Box(
+            modifier = Modifier
+                .padding(paddingValues = innerPadding)
+                .fillMaxSize()
+                .clip(shape = RoundedCornerShape(size = 16.dp))
+                .background(color = contentColor)
+                .innerShadow(shape = AbsoluteRoundedCornerShape(size = 16.dp), Shadow(radius = 12.dp))
+        ) {
+            when (state.scope) {
+                ExpenseScope.Daily -> DailyExpenses(
+                    modifier = Modifier,
+                    expensesList = expenses,
+                    onExpenseClick = { viewModel.onExpenseClick(it) }
+                )
+                ExpenseScope.Weekly -> WeeklyExpenses(Modifier, expenses)
+                ExpenseScope.Monthly -> MonthlyExpenses(Modifier, expenses)
             }
         }
 
