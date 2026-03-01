@@ -2,25 +2,19 @@ package com.example.expensetracker.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Query
-import androidx.room.Upsert
+import androidx.room.Insert
+import androidx.room.Update
 import com.example.expensetracker.data.model.Expense
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExpenseDao {
-    @Query("SELECT * FROM expenses")
-    fun getAll(): Flow<List<Expense>>
-
-    @Query("SELECT * FROM expenses WHERE id = :id")
-    fun getById(id: Long): Flow<Expense>
-
-    @Upsert
-    suspend fun upsert(expense: Expense)
-
+    // Basic expense operations
+    @Insert
+    fun insertExpense(expense: Expense)
+    @Update
+    fun updateExpense(expense: Expense)
     @Delete
-    suspend fun delete(expense: Expense)
-
-    @Query("DELETE FROM expenses WHERE id = :id")
-    suspend fun deleteById(id: Long)
+    fun deleteExpense(expense: Expense)
+    // Getters
+    // TODO: Add getters
 }
