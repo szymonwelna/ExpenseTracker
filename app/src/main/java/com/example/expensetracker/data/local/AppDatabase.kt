@@ -11,7 +11,7 @@ import com.example.expensetracker.data.model.Expense
 @Database(entities = [Expense::class], version = 1)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase: RoomDatabase() {
-    
+
     abstract fun expenseDao(): ExpenseDao
 
     companion object {
