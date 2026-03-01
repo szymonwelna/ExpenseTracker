@@ -1,7 +1,6 @@
 package com.example.expensetracker.data.local
 
 import com.example.expensetracker.data.model.Expense
-import kotlinx.coroutines.flow.Flow
 
 class ExpensesRepository(private val expenseDao: ExpenseDao) {
     // Setters
