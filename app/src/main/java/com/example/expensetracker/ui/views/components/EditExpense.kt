@@ -29,9 +29,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.expensetracker.R
 import com.example.expensetracker.data.model.Expense
-import com.example.expensetracker.data.repository.ExpenseRepository
 import com.example.expensetracker.ui.state.ExpenseDialogMode
-import com.example.expensetracker.ui.viewmodels.EditExpenseViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)

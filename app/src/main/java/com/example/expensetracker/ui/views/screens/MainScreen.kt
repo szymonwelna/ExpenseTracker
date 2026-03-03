@@ -11,54 +11,40 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.innerShadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.expensetracker.ui.state.ExpenseScope
-import com.example.expensetracker.ui.state.Screens
-import com.example.expensetracker.ui.viewmodels.MainScreenViewModel
 import com.example.expensetracker.ui.views.components.EditExpense
 import com.example.expensetracker.ui.views.screens.expenses.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.expensetracker.R
-import com.example.expensetracker.data.repository.ExpenseRepository
+import com.example.expensetracker.ui.ExpenseScope
+import com.example.expensetracker.ui.viewmodels.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(repository: ExpenseRepository, modifier: Modifier = Modifier) {
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    viewModel: MainScreenViewModel = viewModel(factory = MainScreenViewModel.Factory)
+) {
+    val state by viewModel.uiState.collectAsState()
+
     val barsColor = MaterialTheme.colorScheme.surfaceContainer
     val contentColor = MaterialTheme.colorScheme.background
-
-    val viewModel: MainScreenViewModel = viewModel {
-        MainScreenViewModel(repository)
-    }
-
-    val state by viewModel.uiState.collectAsState()
-    val expenses by viewModel.expenses.collectAsState()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor =  barsColor,
         topBar = {
             TopAppBar(
-                title = { Text(state.currentTitle) },
+                title = { /*TODO: Dodać wyświetlanie aktualnego zakresu (dzień/tydzien itp.)*/ },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = barsColor,
                     titleContentColor = MaterialTheme.colorScheme.onSurface)
                 )
         },
         bottomBar = {
-            NavigationBar {
-                Screens.entries.forEach { navItem ->
-                    NavigationBarItem(
-                        selected = state.screen == navItem,
-                        onClick = { viewModel.onScreenChange(navItem) },
-                        label = { Text(navItem.label) },
-                        icon = { Icon(navItem.icon, contentDescription = navItem.label) }
-                    )
-                }
-            }
+            NavigationBar {}
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -80,24 +66,15 @@ fun MainScreen(repository: ExpenseRepository, modifier: Modifier = Modifier) {
                 .background(color = contentColor)
                 .innerShadow(shape = AbsoluteRoundedCornerShape(size = 16.dp), Shadow(radius = 12.dp))
         ) {
-            when (state.scope) {
-                ExpenseScope.Daily -> DailyExpenses(
-                    modifier = Modifier,
-                    expensesList = expenses,
-                    onExpenseClick = { viewModel.onExpenseClick(it) }
-                )
-                ExpenseScope.Weekly -> WeeklyExpenses(Modifier, expenses)
-                ExpenseScope.Monthly -> MonthlyExpenses(Modifier, expenses)
+            when (state.currentScope) {
+                ExpenseScope.Daily -> DailyExpenses()
+                ExpenseScope.Weekly -> WeeklyExpenses()
+                ExpenseScope.Monthly -> MonthlyExpenses()
             }
         }
 
         if (state.showEditExpense) {
-            EditExpense(
-                repository = repository,
-                expenseToEdit = state.selectedExpense
-            ) {
-                viewModel.onToggleEditDialog(false)
-            }
+            EditExpense() {}
         }
     }
 }

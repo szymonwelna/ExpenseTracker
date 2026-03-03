@@ -9,11 +9,7 @@ import com.example.expensetracker.ui.views.components.ExpenseCard
 
 
 @Composable
-fun DailyExpenses(
-    modifier: Modifier = Modifier,
-    expensesList: List<Expense> = emptyList(),
-    onExpenseClick: (Expense) -> Unit
-) {
+fun DailyExpenses() {
     LazyColumn(modifier = modifier) {
         items(expensesList) { expense ->
             ExpenseCard(

@@ -6,6 +6,6 @@ import androidx.compose.ui.Modifier
 import com.example.expensetracker.data.model.Expense
 
 @Composable
-fun MonthlyExpenses(modifier: Modifier, expensesList: List<Expense>) {
+fun MonthlyExpenses() {
     Text("Ekran wydatków miesięcznych")
 }
