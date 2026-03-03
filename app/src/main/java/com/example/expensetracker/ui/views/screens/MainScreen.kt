@@ -73,7 +73,7 @@ fun MainScreen(
             }
         }
 
-        if (state.showEditExpense) {
+        if (state.isEditorOpen) {
             EditExpense() {}
         }
     }

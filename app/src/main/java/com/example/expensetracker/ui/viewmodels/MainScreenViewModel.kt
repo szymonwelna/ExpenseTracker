@@ -20,11 +20,11 @@ class MainScreenViewModel(private val repository: ExpensesRepository) : ViewMode
     val uiState: StateFlow<ExpensesUiState> = _uiState.asStateFlow()
 
     fun onAddExpenseClick() {
-        _uiState.update { it.copy(showEditExpense = true, selectedExpense = null) }
+        _uiState.update { it.copy(isEditorOpen = true, selectedExpense = null) }
     }
 
     fun onExpenseClick(expense: Expense) {
-        _uiState.update { it.copy(showEditExpense = true, selectedExpense = expense) }
+        _uiState.update { it.copy(isEditorOpen = true, selectedExpense = expense) }
     }
 
     fun onScreenChange(screen: SelectedScreen) {
