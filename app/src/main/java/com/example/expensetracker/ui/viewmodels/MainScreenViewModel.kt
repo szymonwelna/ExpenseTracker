@@ -19,24 +19,32 @@ class MainScreenViewModel(private val repository: ExpensesRepository) : ViewMode
     private val _uiState = MutableStateFlow(ExpensesUiState())
     val uiState: StateFlow<ExpensesUiState> = _uiState.asStateFlow()
 
-    fun onAddExpenseClick() {
-        _uiState.update { it.copy(isEditorOpen = true, selectedExpense = null) }
+    init {
+        val startDate = uiState.value.startDate
+        _uiState.update { it.copy(expenses = repository.getDailyExpenses(startDate)) }
     }
+    fun onEvent(event: MainScreenEvent) {
+        when (event) {
+            is MainScreenEvent.AddExpenseClick -> {
+                _uiState.update { it.copy(isEditorOpen = true, selectedExpense = null) }
+            }
 
-    fun onExpenseClick(expense: Expense) {
-        _uiState.update { it.copy(isEditorOpen = true, selectedExpense = expense) }
-    }
+            is MainScreenEvent.ExpenseClick -> {
+                _uiState.update { it.copy(isEditorOpen = true, selectedExpense = event.expense) }
+            }
 
-    fun onScreenChange(screen: SelectedScreen) {
-        _uiState.update { it.copy(currentScreen = screen) }
-    }
+            is MainScreenEvent.ScreenChange -> {
+                _uiState.update { it.copy(currentScreen = event.screen) }
+            }
 
-    fun onScopeChange(scope: ExpenseScope) {
-        _uiState.update { it.copy(currentScope = scope) }
-    }
+            is MainScreenEvent.ScopeChange -> {
+                _uiState.update { it.copy(currentScope = event.scope) }
+            }
 
-    fun onDismissDialog() {
-        _uiState.update { it.copy(selectedScreen = it) }
+            is MainScreenEvent.DismissDialog -> {
+                _uiState.update { it.copy(isEditorOpen = false, selectedExpense = null) }
+            }
+        }
     }
 
     companion object {
