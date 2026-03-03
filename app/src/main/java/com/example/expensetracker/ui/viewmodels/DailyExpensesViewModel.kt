@@ -8,9 +8,11 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.expensetracker.data.ExpenseApplication
 import com.example.expensetracker.data.local.ExpensesRepository
 import com.example.expensetracker.ui.ExpensesUiState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class DailyExpensesViewModel(private val repository: ExpensesRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(ExpensesUiState())
     val uiState: StateFlow<ExpensesUiState> = _uiState.asStateFlow()

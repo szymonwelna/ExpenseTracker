@@ -19,10 +19,6 @@ class MainScreenViewModel(private val repository: ExpensesRepository) : ViewMode
     private val _uiState = MutableStateFlow(ExpensesUiState())
     val uiState: StateFlow<ExpensesUiState> = _uiState.asStateFlow()
 
-    init {
-        val startDate = uiState.value.startDate
-        _uiState.update { it.copy(expenses = repository.getDailyExpenses(startDate)) }
-    }
     fun onEvent(event: MainScreenEvent) {
         when (event) {
             is MainScreenEvent.AddExpenseClick -> {
