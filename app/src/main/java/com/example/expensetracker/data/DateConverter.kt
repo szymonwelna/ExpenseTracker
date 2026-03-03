@@ -1,6 +1,7 @@
 package com.example.expensetracker.data
 
 import androidx.room.TypeConverter
+import com.example.expensetracker.utils.trimToDate
 import kotlin.time.Instant
 
 class DateConverter {
@@ -10,7 +11,7 @@ class DateConverter {
     }
 
     @TypeConverter
-    fun dateToTimestamp(instant: Instant?): Long? {
-        return instant?.toEpochMilliseconds()
+    fun dateToTimestamp(date: Instant?): Long? {
+        return date?.trimToDate()?.toEpochMilliseconds()
     }
 }

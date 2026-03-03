@@ -1,6 +1,7 @@
 package com.example.expensetracker.data.local
 
 import com.example.expensetracker.data.model.Expense
+import kotlin.time.Instant
 
 class ExpensesRepository(private val expenseDao: ExpenseDao) {
     // Setters
@@ -14,4 +15,7 @@ class ExpensesRepository(private val expenseDao: ExpenseDao) {
         expenseDao.deleteExpense(expense)
     }
     // Getters
+    fun getDailyExpenses(date: Instant): List<Expense> {
+        return expenseDao.getDailyExpenses(date)
+    }
 }

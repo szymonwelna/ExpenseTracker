@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.expensetracker.data.model.Expense
+import kotlin.time.Instant
 
 @Dao
 interface ExpenseDao {
@@ -17,7 +18,8 @@ interface ExpenseDao {
     @Delete
     fun deleteExpense(expense: Expense)
     // Getters
-    // TODO: Add getters
+    @Query("SELECT * FROM expenses WHERE date = :date")
+    fun getDailyExpenses(date: Instant): List<Expense>
 
     // Support
     @Query("SELECT EXISTS(SELECT 1 FROM expenses WHERE id = :id)")
